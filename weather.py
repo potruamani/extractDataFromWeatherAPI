@@ -108,7 +108,7 @@ def check_weather_cond(record):
                                  time=time_converter(record.get('dt')), day=record['dt_txt']))
 
     temp = round(record['main']['temp'])
-    if (temp==num for num in range(-15, -18)):
+    if (temp==num for num in range(-15, -18, -1)):
         logging.info("temperature condition of weather is like freezing at {temp} kelvin in {city}"
                      .format(temp=record['main']['temp'], city=record['city']))
 
