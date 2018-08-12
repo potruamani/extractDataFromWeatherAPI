@@ -9,16 +9,17 @@ Steps to Run the Script:
   5. install all the requirements from the requirements.txt using (pip install -r requirements.txt)
   6. run weather.py
  Output:
-   1. check the collections in the mongodb
-       you will see like five_day_forecast and weather_maps
-   2. check if the data is inserted
-   3. you will see one new folder named weather_maps created where the weather.py file is present and all the downloaded maps in it
-   4. you will be prompting a new window showing weather maps for the Clouds in every city  from config file
+   1. check the collections in the mongodb.
+       you will see like five_day_forecast and weather_maps.
+   2. check if the data is inserted.
+   3. you will see one new folder named weather_maps created where the weather.py file is present and all the downloaded maps in it.
+   4. you will see another new folder names graph_dir created where the weather.py file is present and all the plotted graphs in it.
+   4. you will be prompting a new window showing weather maps for the Clouds in every city  from config file.
    
  UserAccess:
     1. change the cities or other options according to your requirement in the config file
    
-  TODO:
+  TODO: --(done)
     1. use graph API to display forecast/previous 10 day data from database as a graph (prebuilt libraries are there to do this)
   
   OtherOptions:
