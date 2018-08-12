@@ -7,6 +7,9 @@ import threading
 import logging
 import sys
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from pymongo import MongoClient
 from config import config_dict
 
@@ -92,11 +95,31 @@ def fetch_and_insert_in_mongo(full_api_url):
     url.close()
     update_dict = {'city': raw_api_dict['city']['name'],
                    'country': raw_api_dict['city']['country']}
-
+    dt_txts = []
+    temparatures = []
     for record in raw_api_dict['list']:
         record.update(update_dict)
         five_day_forecast.insert(record)
         check_weather_cond(record)
+        dt_time = datetime.datetime.strptime(record['dt_txt'], "%Y-%m-%d %H:%M:%S")
+        #print("datetimeformat:", dt_time.strftime('%H'))
+        dt_txts.append(dt_time.strftime('%d %b, %H'))
+        temparatures.append(record['main']['temp'])
+        
+    current_dir_graph = os.path.dirname(os.path.abspath(__file__))
+    graph_dir = os.path.join(current_dir_graph, 'graph_dir')
+    if not os.path.exists(graph_dir):
+        os.mkdir(graph_dir)
+    #print("dt_txts:", dt_txts)
+    #print("temperatures:", temparatures)
+    plt.figure(figsize=(13, 9))
+    plt.plot(dt_txts,temparatures)
+    plt.title(update_dict['city'])
+    plt.axis([0,max(dt_txts),0,max(temparatures)])
+    plt.xticks(dt_txts, rotation=90)
+    for i, txt in enumerate(temparatures):
+        plt.annotate(txt, (dt_txts[i], temparatures[i]))
+    plt.savefig(graph_dir+'\%s_%s_tempVSdate.png' % (update_dict['city'], update_dict['country']))
 
 
 # print the info to the cli outpurt based on weather conditions
@@ -108,7 +131,7 @@ def check_weather_cond(record):
                                  time=time_converter(record.get('dt')), day=record['dt_txt']))
 
     temp = round(record['main']['temp'])
-    if (temp==num for num in range(-15, -18, -1)):
+    if  temp in range(-15, -18, -1):
         logging.info("temperature condition of weather is like freezing at {temp} kelvin in {city}"
                      .format(temp=record['main']['temp'], city=record['city']))
 
